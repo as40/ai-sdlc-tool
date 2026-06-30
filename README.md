@@ -75,6 +75,7 @@ JWT_EXPIRES_IN=7d
 ENCRYPTION_KEY=your-32-byte-hex-key
 
 CORS_ORIGIN=http://localhost:5173
+FRONTEND_URL=http://localhost:5173
 ```
 
 Generate a secure `ENCRYPTION_KEY` (must be exactly 32 bytes hex-encoded):
@@ -237,53 +238,6 @@ ai-sdlc-tool/
    pnpm lint && pnpm type-check
    ```
 6. Commit and open a PR against `main`.
-
----
-
-## Implemented Features
-
-### Phase 1 — Foundation & Platform Scaffolding
-
-| Story | Title                                    | Status |
-| ----- | ---------------------------------------- | ------ |
-| 1.1   | Initialize Monorepo & Engine Directories | Done   |
-| 1.2   | Setup PostgreSQL & pgvector Database     | Done   |
-| 1.3   | Secure Cryptography Utility Setup        | Done   |
-| 1.4   | WebSocket Server Implementation          | Done   |
-
-### Phase 2 — Authentication & Secure Configuration Setup
-
-| Story | Title                                 | Status |
-| ----- | ------------------------------------- | ------ |
-| 2.0   | Local Development Mock Authentication | Done   |
-| 2.1   | Enterprise Identity Integration (SSO) | Done   |
-
-**Story 2.0 adds:**
-
-- `POST /api/auth/mock-login` — development-only endpoint that signs an 8-hour JWT for a given role (`SUPER_ADMIN`, `WORKSPACE_OWNER`, `DEVELOPER`, `VIEWER`). Returns 404 in production.
-- `requireAuth` middleware — validates Bearer JWTs and attaches `req.user` to the request. Used on all protected routes going forward.
-- `DevAuthPanel` React component — rendered only in `import.meta.env.DEV` builds; shows one login button per role, stores the JWT in `localStorage`, and is entirely tree-shaken from production bundles.
-
-**New env var required (2.0):**
-
-```env
-JWT_SECRET=your-secret-at-least-32-chars
-```
-
-**Story 2.1 adds:**
-
-- OIDC and SAML 2.0 SSO via `passport-openidconnect` and `@node-saml/passport-saml` with dynamic per-workspace strategy registration.
-- `sso_configurations` DB table — configs stored AES-256-GCM encrypted; Drizzle migration `0001_freezing_beast.sql`.
-- `requireRole(...roles)` middleware — RBAC guard used on all admin routes.
-- Admin endpoints (`SUPER_ADMIN` only): `GET/POST /api/auth/sso/config` — read and save SSO configuration per workspace.
-- SSO flow endpoints: `GET /api/auth/oidc`, `GET /api/auth/oidc/callback`, `POST /api/auth/saml`, `POST /api/auth/saml/callback` — initiate and complete the IdP authentication, then issue a JWT and redirect to the frontend.
-- `SSOConfigForm` and `SSOSettingsPage` React components for the admin settings UI (routing wired in Phase 6).
-
-**New env vars required (2.1):**
-
-```env
-FRONTEND_URL=http://localhost:5173   # used for post-SSO redirect
-```
 
 ---
 
