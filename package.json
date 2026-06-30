@@ -1,0 +1,15 @@
+{
+  "name": "ai-sdlc-tool",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel --filter './packages/*' dev",
+    "build": "pnpm --filter backend build && pnpm --filter frontend build",
+    "test": "pnpm --recursive test",
+    "lint": "pnpm --recursive lint"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}
