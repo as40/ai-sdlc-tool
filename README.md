@@ -256,6 +256,7 @@ ai-sdlc-tool/
 | Story | Title                                 | Status |
 | ----- | ------------------------------------- | ------ |
 | 2.0   | Local Development Mock Authentication | Done   |
+| 2.1   | Enterprise Identity Integration (SSO) | Done   |
 
 **Story 2.0 adds:**
 
@@ -263,10 +264,25 @@ ai-sdlc-tool/
 - `requireAuth` middleware — validates Bearer JWTs and attaches `req.user` to the request. Used on all protected routes going forward.
 - `DevAuthPanel` React component — rendered only in `import.meta.env.DEV` builds; shows one login button per role, stores the JWT in `localStorage`, and is entirely tree-shaken from production bundles.
 
-**New env var required:**
+**New env var required (2.0):**
 
 ```env
 JWT_SECRET=your-secret-at-least-32-chars
+```
+
+**Story 2.1 adds:**
+
+- OIDC and SAML 2.0 SSO via `passport-openidconnect` and `@node-saml/passport-saml` with dynamic per-workspace strategy registration.
+- `sso_configurations` DB table — configs stored AES-256-GCM encrypted; Drizzle migration `0001_freezing_beast.sql`.
+- `requireRole(...roles)` middleware — RBAC guard used on all admin routes.
+- Admin endpoints (`SUPER_ADMIN` only): `GET/POST /api/auth/sso/config` — read and save SSO configuration per workspace.
+- SSO flow endpoints: `GET /api/auth/oidc`, `GET /api/auth/oidc/callback`, `POST /api/auth/saml`, `POST /api/auth/saml/callback` — initiate and complete the IdP authentication, then issue a JWT and redirect to the frontend.
+- `SSOConfigForm` and `SSOSettingsPage` React components for the admin settings UI (routing wired in Phase 6).
+
+**New env vars required (2.1):**
+
+```env
+FRONTEND_URL=http://localhost:5173   # used for post-SSO redirect
 ```
 
 ---
