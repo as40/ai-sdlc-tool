@@ -6,6 +6,7 @@
     "dev": "pnpm --parallel --filter './packages/*' dev",
     "build": "pnpm --filter backend build && pnpm --filter frontend build",
     "test": "pnpm --recursive test",
+    "coverage": "pnpm --recursive coverage",
     "lint": "pnpm --recursive lint",
     "type-check": "pnpm --recursive type-check",
     "prepare": "husky"
