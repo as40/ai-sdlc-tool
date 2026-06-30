@@ -120,12 +120,14 @@ ai-sdlc-tool/
 
 1. Open `STORY_TRACKER.md` and pick the next `[ ] PENDING` story.
 2. `git checkout main && git pull origin main`
-3. `git checkout -b feature/story-X.Y-<kebab-slug>`
-4. Read the story file in `stories/phase-XX/`.
-5. Implement, write tests, lint, verify.
-6. Commit all changes to the feature branch.
-7. Mark the story `[x] DONE` in `STORY_TRACKER.md` with the completion date.
-8. Update `STORY_TRACKER.md` "Last Updated" field.
+3. `pnpm install` — ensure all dependencies are up to date before branching.
+4. `git checkout -b feature/story-X.Y-<kebab-slug>`
+5. Read the story file in `stories/phase-XX/`.
+6. Implement, write tests, lint, verify.
+7. Commit all changes to the feature branch.
+8. Mark the story `[x] DONE` in `STORY_TRACKER.md` with the completion date.
+9. Update `STORY_TRACKER.md` "Last Updated" field.
+10. Update `README.md` — add the completed story to the "Implemented Features" section and update any setup instructions if the story introduced new env vars, services, or commands.
 
 ## Design References
 
