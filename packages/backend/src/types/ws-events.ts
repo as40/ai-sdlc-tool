@@ -21,5 +21,8 @@ export function makeEvent<T extends WsEvent['type']>(
   type: T,
   payload: Extract<WsEvent, { type: T }>['payload'],
 ): Extract<WsEvent, { type: T }> {
-  return { type, payload, timestamp: new Date().toISOString() } as Extract<WsEvent, { type: T }>;
+  return { type, payload, timestamp: new Date().toISOString() } as unknown as Extract<
+    WsEvent,
+    { type: T }
+  >;
 }

@@ -4,6 +4,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { WebSocket } from 'ws';
 import jwt from 'jsonwebtoken';
 import { WebSocketService } from '../ws.service';
+import type { WsEvent } from '../../types/ws-events';
 
 const TEST_SECRET = 'test-secret-key-for-ws-tests';
 const TEST_USER_ID = 'user-abc';
@@ -72,7 +73,7 @@ describe('WebSocketService', () => {
       const token = makeToken(TEST_USER_ID);
       const client = await connectClient(port, token);
 
-      const event = {
+      const event: WsEvent = {
         type: 'workflow:update',
         payload: { workflowId: 'wf-1', status: 'running' },
         timestamp: new Date().toISOString(),
