@@ -1,7 +1,7 @@
 # STORY TRACKER
 
 > **READ THIS FILE FIRST every session before writing any code.**
-> Last Updated: 2026-06-30 (Story 1.4 complete)
+> Last Updated: 2026-06-30 (Story 2.0 complete)
 
 ---
 
@@ -24,14 +24,14 @@
 
 ## Phase 2 — Authentication & Secure Configuration Setup
 
-| ID  | Title                                 | Status        | Completed |
-| --- | ------------------------------------- | ------------- | --------- |
-| 2.0 | Local Development Mock Authentication | `[ ] PENDING` | —         |
-| 2.1 | Enterprise Identity Integration (SSO) | `[ ] PENDING` | —         |
-| 2.2 | Just-in-Time (JIT) Auto-Provisioning  | `[ ] PENDING` | —         |
-| 2.3 | Role-Based Access Control (RBAC)      | `[ ] PENDING` | —         |
-| 2.4 | Workspace Creation & Team Invites     | `[ ] PENDING` | —         |
-| 2.5 | Universal AI Provider Configuration   | `[ ] PENDING` | —         |
+| ID  | Title                                 | Status        | Completed  |
+| --- | ------------------------------------- | ------------- | ---------- |
+| 2.0 | Local Development Mock Authentication | `[x] DONE`    | 2026-06-30 |
+| 2.1 | Enterprise Identity Integration (SSO) | `[ ] PENDING` | —          |
+| 2.2 | Just-in-Time (JIT) Auto-Provisioning  | `[ ] PENDING` | —          |
+| 2.3 | Role-Based Access Control (RBAC)      | `[ ] PENDING` | —          |
+| 2.4 | Workspace Creation & Team Invites     | `[ ] PENDING` | —          |
+| 2.5 | Universal AI Provider Configuration   | `[ ] PENDING` | —          |
 
 ## Phase 3 — Workspace Onboarding & Multi-Repo Universal Scanner
 
@@ -160,6 +160,6 @@
 ## Summary
 
 - Total Stories: 57
-- Done: 4
+- Done: 5
 - In Progress: 0
-- Pending: 53
+- Pending: 52
