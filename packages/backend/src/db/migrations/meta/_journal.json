@@ -8,6 +8,13 @@
       "when": 1782808586480,
       "tag": "0000_lonely_risque",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782823372760,
+      "tag": "0001_freezing_beast",
+      "breakpoints": true
     }
   ]
 }
