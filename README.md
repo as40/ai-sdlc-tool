@@ -139,7 +139,18 @@ pnpm --filter backend test
 pnpm --filter frontend test
 ```
 
-Coverage target: ≥90% on all new code. CI blocks merges below 80%.
+**Coverage check** — run manually after completing a story to verify the 80% line threshold:
+
+```bash
+# Check coverage across all packages (fails if any package drops below 80% lines)
+pnpm coverage
+
+# Per-package
+pnpm --filter backend coverage
+pnpm --filter frontend coverage
+```
+
+Coverage target: ≥80% lines on all new code (enforced by the coverage command, not CI).
 
 ---
 
