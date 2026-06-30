@@ -16,7 +16,7 @@
 | ID | Title | Status | Completed |
 |----|-------|--------|-----------|
 | 1.1 | Initialize Monorepo & Engine Directories | `[x] DONE` | 2026-06-30 |
-| 1.2 | Setup PostgreSQL & pgvector Database | `[ ] PENDING` | — |
+| 1.2 | Setup PostgreSQL & pgvector Database | `[x] DONE` | 2026-06-30 |
 | 1.3 | Secure Cryptography Utility Setup | `[ ] PENDING` | — |
 | 1.4 | WebSocket Server Implementation | `[ ] PENDING` | — |
 
@@ -144,6 +144,6 @@
 
 ## Summary
 - Total Stories: 57
-- Done: 1
+- Done: 2
 - In Progress: 0
-- Pending: 56
+- Pending: 55
