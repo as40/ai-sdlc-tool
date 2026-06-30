@@ -6,10 +6,20 @@
     "dev": "pnpm --parallel --filter './packages/*' dev",
     "build": "pnpm --filter backend build && pnpm --filter frontend build",
     "test": "pnpm --recursive test",
-    "lint": "pnpm --recursive lint"
+    "lint": "pnpm --recursive lint",
+    "type-check": "pnpm --recursive type-check",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": "eslint --fix",
+    "**/*.{ts,tsx,json,css,md}": "prettier --write"
   },
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8"
   }
 }
