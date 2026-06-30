@@ -1,6 +1,8 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import session from 'express-session';
+import passport from 'passport';
 import { createAuthRouter } from './modules/auth/auth.routes';
 
 export function createApp() {
@@ -14,6 +16,16 @@ export function createApp() {
     }),
   );
   app.use(express.json());
+
+  app.use(
+    session({
+      secret: process.env['JWT_SECRET'] ?? 'dev-session-secret',
+      resave: false,
+      saveUninitialized: false,
+      cookie: { secure: process.env['NODE_ENV'] === 'production', httpOnly: true },
+    }),
+  );
+  app.use(passport.initialize());
 
   app.get('/health', (_req, res) => {
     res.status(200).json({ status: 'ok' });
