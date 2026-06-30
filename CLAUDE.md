@@ -6,7 +6,16 @@ An AI agent-driven Software Development Lifecycle (SDLC) tool. Node.js/Express b
 
 ## CRITICAL: Session Start Protocol
 
-**Every session MUST begin by reading `STORY_TRACKER.md` before doing any work.** This file tracks which stories are done, in-progress, or pending. Never start a story that is already completed.
+Execute these steps **in order** before writing a single line of code:
+
+1. Read `STORY_TRACKER.md` — confirm which story is next; never start one already marked `DONE`.
+2. `git checkout main && git pull origin main`
+3. `pnpm install`
+4. `git checkout -b feature/story-X.Y-<kebab-slug>`
+5. Read the story file in `stories/phase-XX/`.
+6. **Only now** begin implementation.
+
+**The branch MUST exist before any source file is created or modified.** Writing code on the wrong branch and fixing it after (stash/pop) is error-prone and violates this workflow.
 
 ## Repository Structure
 

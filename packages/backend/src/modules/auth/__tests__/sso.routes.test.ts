@@ -64,6 +64,17 @@ vi.mock('@node-saml/passport-saml', () => ({
   Strategy: vi.fn().mockImplementation(() => ({ name: 'saml' })),
 }));
 
+// ── JIT provisioning mock ──────────────────────────────────────────────────
+const repoMocks = vi.hoisted(() => ({ mockUpsert: vi.fn() }));
+
+vi.mock('../../../modules/users/user.repository', () => ({
+  userRepository: { upsert: repoMocks.mockUpsert },
+}));
+
+vi.mock('../../../utils/logger', () => ({
+  logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+}));
+
 // ── helpers ────────────────────────────────────────────────────────────────
 
 function makeToken(role: string) {
@@ -139,6 +150,19 @@ describe('SSO routes', () => {
     dbMocks.mockDeleteWhere.mockResolvedValue(undefined);
     dbMocks.mockInsert.mockReturnValue({ values: dbMocks.mockValues });
     dbMocks.mockValues.mockResolvedValue(undefined);
+
+    repoMocks.mockUpsert.mockResolvedValue({
+      user: {
+        id: 'provisioned-user-id',
+        email: 'sso-user@example.com',
+        displayName: 'SSO User',
+        accessLevel: 'DEVELOPER',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      },
+      isNew: true,
+    });
 
     // Default: with-callback → call immediately; without-callback → redirect
     passportMocks.authenticateFn.mockImplementation(

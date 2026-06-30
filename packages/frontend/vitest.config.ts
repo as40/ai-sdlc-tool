@@ -15,11 +15,21 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test-setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
-    passWithNoTests: true,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
       all: false,
+      exclude: [
+        'src/main.tsx',
+        'src/test-setup.ts',
+        'src/setupTests.ts',
+        'src/components/ui/**',
+        'src/**/*.d.ts',
+        'vitest.config.ts',
+        'node_modules/**',
+        '**/__tests__/**',
+        '**/*.test.{ts,tsx}',
+      ],
       thresholds: {
         lines: 80,
       },
