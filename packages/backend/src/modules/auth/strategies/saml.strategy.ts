@@ -8,9 +8,10 @@ export function createSamlStrategy(config: SamlConfig, verify: SamlVerifyFunctio
   return new SamlStrategy(
     {
       entryPoint: config.entryPoint,
-      cert: config.certificate,
+      idpCert: config.certificate,
       issuer: config.issuer,
-      // Disable signature validation for dev — override per-workspace in production
+      callbackUrl:
+        process.env['SAML_CALLBACK_URL'] ?? 'http://localhost:3001/api/auth/saml/callback',
       wantAssertionsSigned: false,
     },
     verify,

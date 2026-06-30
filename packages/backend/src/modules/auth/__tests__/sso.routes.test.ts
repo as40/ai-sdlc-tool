@@ -86,7 +86,7 @@ async function buildAppWithSession(workspaceId: string) {
   app.use(session({ secret: 'test-session-secret', resave: false, saveUninitialized: true }));
   app.use(passport.initialize());
   app.use((req, _res, next) => {
-    (req.session as Record<string, unknown>)['ssoWorkspaceId'] = workspaceId;
+    (req.session as unknown as Record<string, unknown>)['ssoWorkspaceId'] = workspaceId;
     next();
   });
   app.use('/api/auth', createAuthRouter());

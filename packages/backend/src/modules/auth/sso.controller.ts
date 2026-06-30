@@ -32,7 +32,11 @@ function issueToken(email: string, role: string = 'DEVELOPER'): string {
 }
 
 function frontendUrl(): string {
-  return process.env['CORS_ORIGIN'] ?? 'http://localhost:5173';
+  return process.env['FRONTEND_URL'] ?? process.env['CORS_ORIGIN'] ?? 'http://localhost:5173';
+}
+
+function session(req: Request): Record<string, unknown> {
+  return req.session as unknown as Record<string, unknown>;
 }
 
 // ── OIDC flow ──────────────────────────────────────────────────────────────
@@ -60,6 +64,8 @@ export async function oidcInitiateController(
     return;
   }
 
+  session(req)['ssoWorkspaceId'] = workspaceId;
+
   const strategyName = `oidc-${workspaceId}`;
   passport.use(
     strategyName,
@@ -67,8 +73,6 @@ export async function oidcInitiateController(
       done(null, profile);
     }),
   );
-
-  (req.session as Record<string, unknown>)['ssoWorkspaceId'] = workspaceId;
 
   passport.authenticate(strategyName, { session: false })(req, res, next);
 }
@@ -78,8 +82,7 @@ export async function oidcCallbackController(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  const workspaceId = (req.session as Record<string, unknown>)['ssoWorkspaceId'] as
-    string | undefined;
+  const workspaceId = session(req)['ssoWorkspaceId'] as string | undefined;
   if (!workspaceId) {
     res.redirect(`${frontendUrl()}/login?error=missing_workspace`);
     return;
@@ -140,14 +143,15 @@ export async function samlInitiateController(
     return;
   }
 
-  (req.session as Record<string, unknown>)['ssoWorkspaceId'] = workspaceId;
+  session(req)['ssoWorkspaceId'] = workspaceId;
 
   const strategyName = `saml-${workspaceId}`;
   passport.use(
     strategyName,
+    // cast needed: @node-saml/passport-saml ships Express 4 types; project uses Express 5
     createSamlStrategy(config as SamlConfig, (profile, done) => {
       done(null, profile ?? undefined);
-    }),
+    }) as unknown as passport.Strategy,
   );
 
   passport.authenticate(strategyName, { session: false })(req, res, next);
@@ -158,8 +162,7 @@ export async function samlCallbackController(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  const workspaceId = (req.session as Record<string, unknown>)['ssoWorkspaceId'] as
-    string | undefined;
+  const workspaceId = session(req)['ssoWorkspaceId'] as string | undefined;
   if (!workspaceId) {
     res.redirect(`${frontendUrl()}/login?error=missing_workspace`);
     return;
@@ -174,9 +177,10 @@ export async function samlCallbackController(
   const strategyName = `saml-${workspaceId}`;
   passport.use(
     strategyName,
+    // cast needed: @node-saml/passport-saml ships Express 4 types; project uses Express 5
     createSamlStrategy(config as SamlConfig, (profile, done) => {
       done(null, profile ?? undefined);
-    }),
+    }) as unknown as passport.Strategy,
   );
 
   passport.authenticate(strategyName, { session: false }, (err: unknown, profile: SamlProfile) => {
