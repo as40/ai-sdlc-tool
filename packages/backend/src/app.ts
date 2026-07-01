@@ -4,6 +4,8 @@ import cors from 'cors';
 import session from 'express-session';
 import passport from 'passport';
 import { createAuthRouter } from './modules/auth/auth.routes';
+import { createWorkspaceRouter } from './modules/workspaces/workspace.routes';
+import { createAdminRouter } from './modules/admin/admin.routes';
 
 export function createApp() {
   const app = express();
@@ -32,6 +34,8 @@ export function createApp() {
   });
 
   app.use('/api/auth', createAuthRouter());
+  app.use('/api/workspaces', createWorkspaceRouter());
+  app.use('/api/admin', createAdminRouter());
 
   return app;
 }
