@@ -1,6 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UnauthorizedPage from './pages/UnauthorizedPage';
+import WorkspacePage from './pages/WorkspacePage';
+import TeamPage from './pages/TeamPage';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { useAuthStore } from './store/auth.store';
 
 const DevAuthPanel = import.meta.env.DEV
@@ -48,6 +51,22 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
+        <Route
+          path="/workspaces/new"
+          element={
+            <ProtectedRoute role="DEVELOPER">
+              <WorkspacePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/workspaces/:id/team"
+          element={
+            <ProtectedRoute role="DEVELOPER">
+              <TeamPage workspaceId="" />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
