@@ -8,6 +8,9 @@ import { createOidcStrategy, extractEmailFromOidcProfile } from './strategies/oi
 import { createSamlStrategy, extractEmailFromSamlProfile } from './strategies/saml.strategy';
 import type { OidcProfile } from 'passport-openidconnect';
 import type { Profile as SamlProfile } from '@node-saml/passport-saml';
+import { jitProvisioningMiddleware, JitProvisioningError } from './jit-provisioning.middleware';
+import type { UserRecord } from '../users/user.types';
+import type { SsoProfile } from '../users/user.types';
 
 const OidcConfigSchema = z.object({
   clientId: z.string().min(1),
@@ -25,10 +28,27 @@ const SamlConfigSchema = z.object({
   issuer: z.string().min(1),
 });
 
-function issueToken(email: string, role: string = 'DEVELOPER'): string {
+function signUserToken(user: UserRecord): string {
   const secret = process.env['JWT_SECRET'];
   if (!secret) throw new Error('JWT_SECRET not configured');
-  return jwt.sign({ sub: email, email, role }, secret, { expiresIn: '8h' });
+  return jwt.sign({ sub: user.id, email: user.email, role: user.accessLevel }, secret, {
+    expiresIn: '8h',
+  });
+}
+
+function extractDisplayNameFromOidcProfile(profile: OidcProfile): string {
+  if (profile.displayName) return profile.displayName;
+  const given =
+    typeof profile._json?.['given_name'] === 'string' ? profile._json['given_name'] : '';
+  const family =
+    typeof profile._json?.['family_name'] === 'string' ? profile._json['family_name'] : '';
+  const full = [given, family].filter(Boolean).join(' ');
+  return full || 'Unknown';
+}
+
+function extractDisplayNameFromSamlProfile(profile: SamlProfile): string {
+  if (typeof profile.displayName === 'string' && profile.displayName) return profile.displayName;
+  return 'Unknown';
 }
 
 function frontendUrl(): string {
@@ -54,13 +74,11 @@ export async function oidcInitiateController(
 
   const config = await ssoService.getConfig(workspaceId, 'oidc').catch(() => null);
   if (!config) {
-    res
-      .status(404)
-      .json({
-        status: 404,
-        title: 'Not Found',
-        detail: 'OIDC config not found for this workspace.',
-      });
+    res.status(404).json({
+      status: 404,
+      title: 'Not Found',
+      detail: 'OIDC config not found for this workspace.',
+    });
     return;
   }
 
@@ -109,12 +127,26 @@ export async function oidcCallbackController(
     const email = extractEmailFromOidcProfile(profile);
     if (!email) return res.redirect(`${frontendUrl()}/login?error=no_email`);
 
-    try {
-      const token = issueToken(email);
-      res.redirect(`${frontendUrl()}?token=${token}`);
-    } catch {
-      next(new Error('Failed to issue token'));
-    }
+    const ssoProfile: SsoProfile = {
+      email,
+      displayName: extractDisplayNameFromOidcProfile(profile),
+      providerId: profile.id,
+    };
+
+    void jitProvisioningMiddleware(ssoProfile, (provisionErr, user) => {
+      if (provisionErr instanceof JitProvisioningError && provisionErr.statusCode === 403) {
+        return res.redirect(`${frontendUrl()}/login?error=account_disabled`);
+      }
+      if (provisionErr || !user) {
+        return next(provisionErr ?? new Error('Provisioning failed'));
+      }
+      try {
+        const token = signUserToken(user);
+        res.redirect(`${frontendUrl()}?token=${token}`);
+      } catch {
+        next(new Error('Failed to issue token'));
+      }
+    });
   })(req, res, next);
 }
 
@@ -133,13 +165,11 @@ export async function samlInitiateController(
 
   const config = await ssoService.getConfig(workspaceId, 'saml').catch(() => null);
   if (!config) {
-    res
-      .status(404)
-      .json({
-        status: 404,
-        title: 'Not Found',
-        detail: 'SAML config not found for this workspace.',
-      });
+    res.status(404).json({
+      status: 404,
+      title: 'Not Found',
+      detail: 'SAML config not found for this workspace.',
+    });
     return;
   }
 
@@ -190,12 +220,26 @@ export async function samlCallbackController(
     const email = extractEmailFromSamlProfile(profile);
     if (!email) return res.redirect(`${frontendUrl()}/login?error=no_email`);
 
-    try {
-      const token = issueToken(email);
-      res.redirect(`${frontendUrl()}?token=${token}`);
-    } catch {
-      next(new Error('Failed to issue token'));
-    }
+    const ssoProfile: SsoProfile = {
+      email,
+      displayName: extractDisplayNameFromSamlProfile(profile),
+      providerId: profile.nameID ?? email,
+    };
+
+    void jitProvisioningMiddleware(ssoProfile, (provisionErr, user) => {
+      if (provisionErr instanceof JitProvisioningError && provisionErr.statusCode === 403) {
+        return res.redirect(`${frontendUrl()}/login?error=account_disabled`);
+      }
+      if (provisionErr || !user) {
+        return next(provisionErr ?? new Error('Provisioning failed'));
+      }
+      try {
+        const token = signUserToken(user);
+        res.redirect(`${frontendUrl()}?token=${token}`);
+      } catch {
+        next(new Error('Failed to issue token'));
+      }
+    });
   })(req, res, next);
 }
 
@@ -206,13 +250,11 @@ export async function getSsoConfigController(req: Request, res: Response): Promi
   const provider = req.query['provider'] as SsoProvider | undefined;
 
   if (!workspaceId || !provider) {
-    res
-      .status(400)
-      .json({
-        status: 400,
-        title: 'Bad Request',
-        detail: 'workspaceId and provider are required.',
-      });
+    res.status(400).json({
+      status: 400,
+      title: 'Bad Request',
+      detail: 'workspaceId and provider are required.',
+    });
     return;
   }
 
@@ -234,13 +276,11 @@ export async function saveSsoConfigController(
   const provider = req.body?.provider as SsoProvider | undefined;
 
   if (!workspaceId || !provider) {
-    res
-      .status(400)
-      .json({
-        status: 400,
-        title: 'Bad Request',
-        detail: 'workspaceId and provider are required.',
-      });
+    res.status(400).json({
+      status: 400,
+      title: 'Bad Request',
+      detail: 'workspaceId and provider are required.',
+    });
     return;
   }
 
