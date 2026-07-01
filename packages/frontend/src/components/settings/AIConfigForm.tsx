@@ -1,4 +1,10 @@
 import { useState } from 'react';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Select } from '../ui/select';
+import { Checkbox } from '../ui/checkbox';
+import { FormMessage } from '../ui/form-message';
 
 const PROVIDERS = ['Anthropic', 'OpenAI', 'Azure OpenAI', 'Custom/Local'] as const;
 type Provider = (typeof PROVIDERS)[number];
@@ -81,92 +87,74 @@ export default function AIConfigForm({ workspaceId, token, onSuccess }: Props) {
 
   return (
     <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
-      <div>
-        <label htmlFor="ai-provider" className="block text-sm text-zinc-400">
-          Provider
-        </label>
-        <select
+      <div className="space-y-1">
+        <Label htmlFor="ai-provider">Provider</Label>
+        <Select
           id="ai-provider"
           value={form.provider}
           onChange={(e) => handleChange('provider', e.target.value as Provider)}
-          className="mt-1 w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50"
         >
           {PROVIDERS.map((p) => (
             <option key={p} value={p}>
               {p}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
 
-      <div>
-        <label htmlFor="ai-model-name" className="block text-sm text-zinc-400">
-          Model name
-        </label>
-        <input
+      <div className="space-y-1">
+        <Label htmlFor="ai-model-name">Model name</Label>
+        <Input
           id="ai-model-name"
           type="text"
           value={form.modelName}
           onChange={(e) => handleChange('modelName', e.target.value)}
           placeholder="e.g. claude-sonnet-4-6"
           required
-          className="mt-1 w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 outline-none focus:border-zinc-500"
         />
       </div>
 
-      <div>
-        <label htmlFor="ai-api-key" className="block text-sm text-zinc-400">
-          API key{form.isLocal ? ' (optional for local)' : ' *'}
-        </label>
-        <input
+      <div className="space-y-1">
+        <Label htmlFor="ai-api-key">API key{form.isLocal ? ' (optional for local)' : ' *'}</Label>
+        <Input
           id="ai-api-key"
           type="password"
           value={form.apiKey}
           onChange={(e) => handleChange('apiKey', e.target.value)}
           placeholder="Write-only — stored encrypted"
           autoComplete="new-password"
-          className="mt-1 w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 outline-none focus:border-zinc-500"
         />
       </div>
 
       {showBaseUrl && (
-        <div>
-          <label htmlFor="ai-base-url" className="block text-sm text-zinc-400">
-            Base URL
-          </label>
-          <input
+        <div className="space-y-1">
+          <Label htmlFor="ai-base-url">Base URL</Label>
+          <Input
             id="ai-base-url"
             type="text"
             value={form.baseUrl}
             onChange={(e) => handleChange('baseUrl', e.target.value)}
             placeholder="e.g. http://localhost:11434"
-            className="mt-1 w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 outline-none focus:border-zinc-500"
           />
         </div>
       )}
 
       <div className="flex items-center gap-3">
-        <input
+        <Checkbox
           id="ai-is-local"
-          type="checkbox"
           checked={form.isLocal}
           onChange={(e) => handleChange('isLocal', e.target.checked)}
-          className="h-4 w-4 rounded border-zinc-600 bg-zinc-900 accent-indigo-500"
         />
-        <label htmlFor="ai-is-local" className="text-sm text-zinc-400">
+        <Label htmlFor="ai-is-local" className="text-sm text-zinc-400">
           Local / self-hosted model
-        </label>
+        </Label>
       </div>
 
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <FormMessage>{error}</FormMessage>}
 
-      <button
-        type="submit"
-        disabled={loading || !form.modelName.trim()}
-        className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
-      >
+      <Button type="submit" disabled={loading || !form.modelName.trim()}>
         {loading ? 'Saving…' : 'Add Configuration'}
-      </button>
+      </Button>
     </form>
   );
 }

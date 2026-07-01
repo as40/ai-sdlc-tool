@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Button } from '../ui/button';
+import { FormMessage } from '../ui/form-message';
 
 type Role = 'SUPER_ADMIN' | 'WORKSPACE_OWNER' | 'DEVELOPER' | 'VIEWER';
 
@@ -47,17 +49,18 @@ export default function DevAuthPanel({ onLogin }: Props) {
       </p>
       <div className="flex flex-col gap-2">
         {ROLES.map(({ role, label }) => (
-          <button
+          <Button
             key={role}
-            onClick={() => void login(role)}
+            variant="warning"
             disabled={loading !== null}
-            className="rounded bg-yellow-600/80 px-3 py-1.5 text-sm font-medium text-zinc-950 transition hover:bg-yellow-500 disabled:opacity-50"
+            className="w-full"
+            onClick={() => void login(role)}
           >
             {loading === role ? 'Signing in…' : `Login as ${label}`}
-          </button>
+          </Button>
         ))}
       </div>
-      {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
+      {error && <FormMessage className="mt-2">{error}</FormMessage>}
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import { useAuthStore } from '../../store/auth.store';
 import AIConfigForm from '../../components/settings/AIConfigForm';
+import { Button } from '../../components/ui/button';
+import { Alert } from '../../components/ui/alert';
 
 interface AIConfigRecord {
   id: string;
@@ -17,11 +20,8 @@ interface TestResult {
   error?: string;
 }
 
-interface Props {
-  workspaceId: string;
-}
-
-export default function AIConfigPage({ workspaceId }: Props) {
+export default function AIConfigPage() {
+  const { id: workspaceId = '' } = useParams<{ id: string }>();
   const token = useAuthStore((s) => s.token);
   const [configs, setConfigs] = useState<AIConfigRecord[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -86,7 +86,11 @@ export default function AIConfigPage({ workspaceId }: Props) {
     <div className="min-h-screen bg-zinc-950 p-8">
       <h1 className="mb-8 text-2xl font-semibold text-zinc-50">AI Provider Configuration</h1>
 
-      {loadError && <p className="mb-4 text-sm text-red-400">{loadError}</p>}
+      {loadError && (
+        <Alert variant="error" className="mb-4">
+          {loadError}
+        </Alert>
+      )}
 
       {configs.length > 0 && (
         <section className="mb-10">
@@ -113,20 +117,22 @@ export default function AIConfigPage({ workspaceId }: Props) {
                       )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <button
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => void handleTest(cfg.id)}
                         disabled={testing[cfg.id]}
-                        className="rounded border border-zinc-600 px-2 py-1 text-xs text-zinc-300 hover:border-zinc-400 disabled:opacity-50"
                       >
                         {testing[cfg.id] ? 'Testing…' : 'Test'}
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
                         onClick={() => void handleDelete(cfg.id)}
                         disabled={deleting[cfg.id]}
-                        className="rounded border border-red-800 px-2 py-1 text-xs text-red-400 hover:border-red-600 disabled:opacity-50"
                       >
                         {deleting[cfg.id] ? 'Deleting…' : 'Delete'}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                   {result && (

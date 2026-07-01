@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import AIConfigPage from '../AIConfigPage';
 import * as authStore from '../../../store/auth.store';
 
@@ -16,6 +17,16 @@ function mockAuth(token: string | null = 'mock-token') {
   };
   mockUseAuthStore.mockImplementation((selector: (s: authStore.AuthState) => unknown) =>
     selector(state),
+  );
+}
+
+function renderPage() {
+  return render(
+    <MemoryRouter initialEntries={['/workspaces/ws-001/settings/ai-config']}>
+      <Routes>
+        <Route path="/workspaces/:id/settings/ai-config" element={<AIConfigPage />} />
+      </Routes>
+    </MemoryRouter>,
   );
 }
 
@@ -47,7 +58,7 @@ describe('AIConfigPage', () => {
       json: async () => [],
     } as Response);
 
-    render(<AIConfigPage workspaceId="ws-001" />);
+    renderPage();
 
     expect(screen.getByRole('heading', { name: 'AI Provider Configuration' })).toBeInTheDocument();
     await waitFor(() => {
@@ -61,7 +72,7 @@ describe('AIConfigPage', () => {
       json: async () => CONFIGS,
     } as Response);
 
-    render(<AIConfigPage workspaceId="ws-001" />);
+    renderPage();
 
     await waitFor(() => {
       expect(screen.getByText('claude-3-5-sonnet-20241022')).toBeInTheDocument();
@@ -74,7 +85,7 @@ describe('AIConfigPage', () => {
       json: async () => ({}),
     } as Response);
 
-    render(<AIConfigPage workspaceId="ws-001" />);
+    renderPage();
 
     await waitFor(() => {
       expect(screen.getByText('Failed to load configurations.')).toBeInTheDocument();
@@ -89,7 +100,7 @@ describe('AIConfigPage', () => {
         json: async () => ({ success: true, latencyMs: 42 }),
       } as Response);
 
-    render(<AIConfigPage workspaceId="ws-001" />);
+    renderPage();
 
     await waitFor(() => screen.getByRole('button', { name: 'Test' }));
     fireEvent.click(screen.getByRole('button', { name: 'Test' }));
@@ -104,7 +115,7 @@ describe('AIConfigPage', () => {
       .mockResolvedValueOnce({ ok: true, json: async () => CONFIGS } as Response)
       .mockResolvedValueOnce({ ok: true, json: async () => ({}) } as Response);
 
-    render(<AIConfigPage workspaceId="ws-001" />);
+    renderPage();
 
     await waitFor(() => screen.getByRole('button', { name: 'Delete' }));
     fireEvent.click(screen.getByRole('button', { name: 'Delete' }));

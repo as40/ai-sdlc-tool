@@ -72,7 +72,7 @@ export default function App() {
           path="/workspaces/:id/settings/ai-config"
           element={
             <ProtectedRoute role="WORKSPACE_OWNER">
-              <AIConfigPage workspaceId="" />
+              <AIConfigPage />
             </ProtectedRoute>
           }
         />

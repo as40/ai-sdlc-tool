@@ -1,4 +1,9 @@
 import { useState } from 'react';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
+import { FormMessage } from '../ui/form-message';
 
 type Provider = 'oidc' | 'saml';
 
@@ -96,13 +101,13 @@ export default function SSOConfigForm({ workspaceId, provider, onSaved }: Props)
               ['redirectUri', 'Redirect URI'],
             ] as [keyof OidcFields, string][]
           ).map(([key, label]) => (
-            <div key={key}>
-              <label className="mb-1 block text-xs font-medium text-zinc-300">{label}</label>
-              <input
+            <div key={key} className="space-y-1">
+              <Label className="text-xs font-medium text-zinc-300">{label}</Label>
+              <Input
                 type={key === 'clientSecret' ? 'password' : 'text'}
                 value={oidc[key]}
                 onChange={(e) => setOidc((prev) => ({ ...prev, [key]: e.target.value }))}
-                className="w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="py-1.5 focus:ring-1 focus:ring-blue-500"
                 required
               />
             </div>
@@ -116,50 +121,40 @@ export default function SSOConfigForm({ workspaceId, provider, onSaved }: Props)
               ['issuer', 'Issuer'],
             ] as [keyof SamlFields, string][]
           ).map(([key, label]) => (
-            <div key={key}>
-              <label className="mb-1 block text-xs font-medium text-zinc-300">{label}</label>
-              <input
+            <div key={key} className="space-y-1">
+              <Label className="text-xs font-medium text-zinc-300">{label}</Label>
+              <Input
                 type="text"
                 value={saml[key]}
                 onChange={(e) => setSaml((prev) => ({ ...prev, [key]: e.target.value }))}
-                className="w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="py-1.5 focus:ring-1 focus:ring-blue-500"
                 required
               />
             </div>
           ))}
-          <div>
-            <label className="mb-1 block text-xs font-medium text-zinc-300">
-              Certificate (PEM)
-            </label>
-            <textarea
+          <div className="space-y-1">
+            <Label className="text-xs font-medium text-zinc-300">Certificate (PEM)</Label>
+            <Textarea
               value={saml.certificate}
               onChange={(e) => setSaml((prev) => ({ ...prev, certificate: e.target.value }))}
               rows={6}
-              className="w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="font-mono text-xs focus:ring-1 focus:ring-blue-500"
               required
             />
           </div>
         </>
       )}
 
-      {error && <p className="text-xs text-red-400">{error}</p>}
-      {success && <p className="text-xs text-green-400">Configuration saved successfully.</p>}
+      {error && <FormMessage>{error}</FormMessage>}
+      {success && <FormMessage variant="success">Configuration saved successfully.</FormMessage>}
 
       <div className="flex gap-3">
-        <button
-          type="submit"
-          disabled={saving}
-          className="rounded bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-500 disabled:opacity-50"
-        >
+        <Button type="submit" disabled={saving} className="bg-blue-600 hover:bg-blue-500">
           {saving ? 'Saving…' : 'Save'}
-        </button>
-        <button
-          type="button"
-          onClick={handleTestConnection}
-          className="rounded border border-zinc-600 px-4 py-1.5 text-sm font-medium text-zinc-300 hover:border-zinc-400"
-        >
+        </Button>
+        <Button type="button" variant="outline" onClick={handleTestConnection}>
           Test Connection
-        </button>
+        </Button>
       </div>
     </form>
   );
