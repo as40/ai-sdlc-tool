@@ -1,7 +1,7 @@
 # STORY TRACKER
 
 > **READ THIS FILE FIRST every session before writing any code.**
-> Last Updated: 2026-07-01 (Added stories 5.7, 5.8, 5.9, 6.9, 6.10 — HITL tool, loop suspension, anti-loop guard, activity stream, chat action blocks)
+> Last Updated: 2026-07-01 (Story 2.3 complete; added stories 5.7, 5.8, 5.9, 6.9, 6.10)
 
 ---
 
@@ -29,7 +29,7 @@
 | 2.0 | Local Development Mock Authentication | `[x] DONE`    | 2026-06-30 |
 | 2.1 | Enterprise Identity Integration (SSO) | `[x] DONE`    | 2026-06-30 |
 | 2.2 | Just-in-Time (JIT) Auto-Provisioning  | `[x] DONE`    | 2026-06-30 |
-| 2.3 | Role-Based Access Control (RBAC)      | `[ ] PENDING` | —          |
+| 2.3 | Role-Based Access Control (RBAC)      | `[x] DONE`    | 2026-07-01 |
 | 2.4 | Workspace Creation & Team Invites     | `[ ] PENDING` | —          |
 | 2.5 | Universal AI Provider Configuration   | `[ ] PENDING` | —          |
 

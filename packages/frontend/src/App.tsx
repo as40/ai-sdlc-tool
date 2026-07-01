@@ -1,13 +1,16 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import UnauthorizedPage from './pages/UnauthorizedPage';
+import { useAuthStore } from './store/auth.store';
 
 const DevAuthPanel = import.meta.env.DEV
   ? lazy(() => import('./components/dev/DevAuthPanel'))
   : null;
 
-export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('auth_token'));
+function HomePage() {
+  const { user, setToken } = useAuthStore();
 
-  if (isLoggedIn) {
+  if (user) {
     return (
       <div className="flex h-screen items-center justify-center bg-zinc-950">
         <div className="text-center">
@@ -27,10 +30,25 @@ export default function App() {
         </div>
         {DevAuthPanel && (
           <Suspense fallback={null}>
-            <DevAuthPanel onLogin={() => setIsLoggedIn(true)} />
+            <DevAuthPanel
+              onLogin={(token: string) => {
+                setToken(token);
+              }}
+            />
           </Suspense>
         )}
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }

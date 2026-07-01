@@ -45,11 +45,21 @@ describe('requireRole middleware', () => {
     expect(res.body).toMatchObject({ status: 403, title: 'Forbidden' });
   });
 
-  it('returns 403 when req.user is absent (no auth middleware upstream)', async () => {
+  it('returns 401 when req.user is absent (no auth middleware upstream)', async () => {
     const app = express();
     app.get('/no-auth', requireRole('SUPER_ADMIN'), (_req, res) => res.json({ ok: true }));
     const res = await supertest(app).get('/no-auth');
+    expect(res.status).toBe(401);
+    expect(res.body).toMatchObject({ status: 401, title: 'Unauthorized' });
+  });
+
+  it('returns 403 when WORKSPACE_OWNER accesses SUPER_ADMIN-only route', async () => {
+    const token = makeToken('WORKSPACE_OWNER');
+    const res = await supertest(createTestApp())
+      .get('/admin')
+      .set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(403);
+    expect(res.body).toMatchObject({ status: 403, title: 'Forbidden' });
   });
 
   it('calls next() when the user has the required role', async () => {

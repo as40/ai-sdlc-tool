@@ -10,7 +10,7 @@ const ROLES: { role: Role; label: string }[] = [
 ];
 
 interface Props {
-  onLogin?: () => void;
+  onLogin?: (token: string) => void;
 }
 
 export default function DevAuthPanel({ onLogin }: Props) {
@@ -32,7 +32,7 @@ export default function DevAuthPanel({ onLogin }: Props) {
       }
       const { token } = (await res.json()) as { token: string };
       localStorage.setItem('auth_token', token);
-      onLogin?.();
+      onLogin?.(token);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
