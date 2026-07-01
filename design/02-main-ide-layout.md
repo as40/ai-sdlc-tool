@@ -1,5 +1,6 @@
 # Main IDE Layout
-> Phase 6 (Stories 6.1–6.8) — Visual Workspace IDE & Live Code Editor
+
+> Phase 6 (Stories 6.1–6.10) — Visual Workspace IDE & Live Code Editor
 
 This is the primary workspace screen. Users spend 90% of their session here.
 
@@ -198,6 +199,7 @@ This is the primary workspace screen. Users spend 90% of their session here.
 ## Bottom Panel Tabs
 
 ### Terminal Tab (Story 9.3)
+
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │ [Chat] [Terminal] [Logs]                       [Collapse ▲]    │
@@ -218,6 +220,7 @@ This is the primary workspace screen. Users spend 90% of their session here.
 ```
 
 ### Logs Tab (AI Execution Log)
+
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │ [Chat] [Terminal] [Logs]                       [Collapse ▲]    │
@@ -234,3 +237,146 @@ This is the primary workspace screen. Users spend 90% of their session here.
 │ 14:03:28  ✓ TESTS_PASS 8/8 tests passed                        │
 └────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Agent Activity Strip (Story 6.9)
+
+Sits above the chat message list inside the bottom panel. Hidden when no workflow is running. Shows transient chips — each chip disappears 3 seconds after its `tool_done` or `tool_error` event arrives. `hitl_pending` chips persist until the user responds.
+
+### Active state (agent running tools)
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ [Chat] [Terminal] [Logs]                              [Collapse ▲]     │
+│ ──────────────────────────────────────────────────────────────────     │
+│                                                                        │
+│  ┌─────────────────────────┐ ┌────────────────────────┐               │
+│  │ ⟳ Reading auth.service  │ │ ⟳ Running: npm test... │               │  ← activity strip
+│  └─────────────────────────┘ └────────────────────────┘               │
+│  (chips animate in/out, max 4 visible simultaneously)                  │
+│                                                                        │
+│  ┌─────────────────────────────────────────────────────────────────┐  │
+│  │  [chat messages...]                                             │  │
+│  └─────────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Chip colour legend
+
+```
+  ┌────────────────────────────┐    ← llm_thinking   gray, pulse animation
+  │ ⟳ Agent is reasoning...   │
+  └────────────────────────────┘
+
+  ┌────────────────────────────┐    ← tool_start     blue
+  │ ⟳ Reading src/index.ts    │
+  └────────────────────────────┘
+
+  ┌────────────────────────────┐    ← tool_done      green (3 s then removes)
+  │ ✓ File read successfully   │
+  └────────────────────────────┘
+
+  ┌────────────────────────────┐    ← tool_error     red
+  │ ✗ Command failed: exit 1   │
+  └────────────────────────────┘
+
+  ┌────────────────────────────┐    ← hitl_pending   amber, stays until answered
+  │ ⚠ Waiting for your input  │
+  └────────────────────────────┘
+```
+
+### Idle state (no workflow active — strip hidden)
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ [Chat] [Terminal] [Logs]                              [Collapse ▲]     │
+│ ──────────────────────────────────────────────────────────────────     │
+│  (no activity strip rendered — zero height, no gap)                    │
+│                                                                        │
+│  ┌─────────────────────────────────────────────────────────────────┐  │
+│  │  [chat messages...]                                             │  │
+│  └─────────────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## HITL Chat Action Block (Story 6.10)
+
+Rendered as an inline message in the chat thread — NOT a modal. Appears when the AI calls `request_human_input`. The rest of the IDE (file tree, editor, diff viewer) remains fully usable while the block waits.
+
+### Pending state (awaiting user choice)
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  [Chat] [Terminal] [Logs]                          [Collapse ▲]     │
+│  ───────────────────────────────────────────────────────────────    │
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                                                               │  │
+│  │  🤖  Orchestrator                                             │  │
+│  │                                                               │  │
+│  │  The test suite is failing due to a missing environment       │  │
+│  │  variable. How would you like to proceed?                     │  │
+│  │                                                               │  │
+│  │  ┌──────────────────────────────────────────────────────┐    │  │
+│  │  │ Context                                              │    │  │
+│  │  │ TEST_DATABASE_URL is undefined in .env.test          │    │  │  ← muted code block
+│  │  └──────────────────────────────────────────────────────┘    │  │
+│  │                                                               │  │
+│  │  ┌─────────────────────────┐  ┌────────────────────────┐     │  │
+│  │  │  Add the env var        │  │  Skip tests for now    │     │  │  ← option buttons
+│  │  └─────────────────────────┘  └────────────────────────┘     │  │
+│  │  ┌─────────────────────────────────────────────────────┐     │  │
+│  │  │  Abort the workflow                                 │     │  │
+│  │  └─────────────────────────────────────────────────────┘     │  │
+│  │                                                               │  │
+│  │  ── or type a custom reply ──────────────────────────────    │  │
+│  │  ┌─────────────────────────────────────────────────────┐     │  │
+│  │  │ Type a custom instruction...                        │     │  │  ← free-text (optional)
+│  │  └─────────────────────────────────────────────────────┘     │  │
+│  │                                         [Send reply →]       │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+│                                                                     │
+│  ┌──────────────────────────────────────────── [Context +] [Send] ┐ │
+│  │ Type a message or /command...                                  │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### After selection (locked state)
+
+```
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                                                               │  │
+│  │  🤖  Orchestrator                                  2 min ago  │  │
+│  │                                                               │  │
+│  │  The test suite is failing due to a missing environment       │  │
+│  │  variable. How would you like to proceed?                     │  │
+│  │                                                               │  │
+│  │  ✔  You chose: Add the env var                               │  │
+│  │                                                               │  │  ← buttons replaced,
+│  └───────────────────────────────────────────────────────────────┘  │     read-only
+```
+
+### Timeout state (workflow stopped before user responded)
+
+```
+│  ┌───────────────────────────────────────────────────────────────┐  │
+│  │                                                               │  │
+│  │  🤖  Orchestrator                                             │  │
+│  │                                                               │  │
+│  │  The test suite is failing...                                 │  │
+│  │                                                               │  │
+│  │  ⚠  Request timed out — workflow stopped.                    │  │  ← buttons disabled,
+│  │     [Restart workflow]                                        │  │    timeout message
+│  │                                                               │  │
+│  └───────────────────────────────────────────────────────────────┘  │
+```
+
+### Layout notes
+
+- The action block is a distinct message bubble in the chat thread, visually differentiated from regular AI text responses by a left amber border.
+- Buttons use the same `shadcn/ui Button` component with `variant="outline"` and switch to `variant="default"` on hover.
+- Free-text input only renders if the backend sets `allow_free_text: true` on the tool call.
+- The main chat input at the bottom remains enabled — the user can type other messages or slash commands even while a HITL block is pending (those messages are queued until the workflow resumes).
