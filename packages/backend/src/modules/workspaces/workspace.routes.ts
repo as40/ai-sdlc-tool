@@ -9,6 +9,7 @@ import {
   inviteUserController,
   removeMemberController,
 } from './workspace.controller';
+import { createAIConfigRouter } from '../ai-config/ai-config.routes';
 
 export function createWorkspaceRouter(): Router {
   const router = Router();
@@ -43,12 +44,12 @@ export function createWorkspaceRouter(): Router {
     (_req, res) => res.status(200).json({ ok: true }),
   );
 
-  router.get(
+  router.use(
     '/:id/ai-config',
     requireAuth,
     workspaceGuard,
     requireRole('WORKSPACE_OWNER', 'SUPER_ADMIN'),
-    (_req, res) => res.status(200).json({ ok: true }),
+    createAIConfigRouter(),
   );
 
   return router;

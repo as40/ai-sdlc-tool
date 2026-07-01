@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import UnauthorizedPage from './pages/UnauthorizedPage';
 import WorkspacePage from './pages/WorkspacePage';
 import TeamPage from './pages/TeamPage';
+import AIConfigPage from './pages/settings/AIConfigPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { useAuthStore } from './store/auth.store';
 
@@ -64,6 +65,14 @@ export default function App() {
           element={
             <ProtectedRoute role="DEVELOPER">
               <TeamPage workspaceId="" />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/workspaces/:id/settings/ai-config"
+          element={
+            <ProtectedRoute role="WORKSPACE_OWNER">
+              <AIConfigPage workspaceId="" />
             </ProtectedRoute>
           }
         />
