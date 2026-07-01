@@ -1,7 +1,7 @@
 # STORY TRACKER
 
 > **READ THIS FILE FIRST every session before writing any code.**
-> Last Updated: 2026-07-01 (Story 2.3 complete)
+> Last Updated: 2026-07-01 (Story 2.3 complete; added stories 5.7, 5.8, 5.9, 6.9, 6.10)
 
 ---
 
@@ -52,26 +52,31 @@
 
 ## Phase 5 — Core AI Orchestration Engine
 
-| ID  | Title                                          | Status        | Completed |
-| --- | ---------------------------------------------- | ------------- | --------- |
-| 5.1 | Dynamic Registry Loader                        | `[ ] PENDING` | —         |
-| 5.2 | System Prompt & Markdown Standards Compiler    | `[ ] PENDING` | —         |
-| 5.3 | Model Context Protocol (MCP) Skill Router      | `[ ] PENDING` | —         |
-| 5.4 | State-Machine Workflow Orchestrator            | `[ ] PENDING` | —         |
-| 5.5 | Human-in-the-Loop (HITL) Interceptor & Revisor | `[ ] PENDING` | —         |
+| ID  | Title                                                | Status        | Completed |
+| --- | ---------------------------------------------------- | ------------- | --------- |
+| 5.1 | Dynamic Registry Loader                              | `[ ] PENDING` | —         |
+| 5.2 | System Prompt & Markdown Standards Compiler          | `[ ] PENDING` | —         |
+| 5.3 | Model Context Protocol (MCP) Skill Router            | `[ ] PENDING` | —         |
+| 5.4 | State-Machine Workflow Orchestrator                  | `[ ] PENDING` | —         |
+| 5.5 | Human-in-the-Loop (HITL) Interceptor & Revisor       | `[ ] PENDING` | —         |
+| 5.7 | HITL Request Tool Registration (request_human_input) | `[ ] PENDING` | —         |
+| 5.8 | Orchestrator Loop Suspension & Activity Stream       | `[ ] PENDING` | —         |
+| 5.9 | Anti-Loop Interception Middleware                    | `[ ] PENDING` | —         |
 
 ## Phase 6 — Visual Workspace IDE & Live Code Editor
 
-| ID  | Title                                  | Status        | Completed |
-| --- | -------------------------------------- | ------------- | --------- |
-| 6.1 | Main IDE View Grid Layout              | `[ ] PENDING` | —         |
-| 6.2 | Remote File Tree Explorer Component    | `[ ] PENDING` | —         |
-| 6.3 | Center-Stage Inline Code Editor        | `[ ] PENDING` | —         |
-| 6.4 | File Mutation Tracker (Save & Discard) | `[ ] PENDING` | —         |
-| 6.5 | Right Sidebar Live Git Diff Viewer     | `[ ] PENDING` | —         |
-| 6.6 | Mode Selector & Approval Control Panel | `[ ] PENDING` | —         |
-| 6.7 | Hybrid Chat Interface & Slash Commands | `[ ] PENDING` | —         |
-| 6.8 | Manual Context Commands                | `[ ] PENDING` | —         |
+| ID   | Title                                  | Status        | Completed |
+| ---- | -------------------------------------- | ------------- | --------- |
+| 6.1  | Main IDE View Grid Layout              | `[ ] PENDING` | —         |
+| 6.2  | Remote File Tree Explorer Component    | `[ ] PENDING` | —         |
+| 6.3  | Center-Stage Inline Code Editor        | `[ ] PENDING` | —         |
+| 6.4  | File Mutation Tracker (Save & Discard) | `[ ] PENDING` | —         |
+| 6.5  | Right Sidebar Live Git Diff Viewer     | `[ ] PENDING` | —         |
+| 6.6  | Mode Selector & Approval Control Panel | `[ ] PENDING` | —         |
+| 6.7  | Hybrid Chat Interface & Slash Commands | `[ ] PENDING` | —         |
+| 6.8  | Manual Context Commands                | `[ ] PENDING` | —         |
+| 6.9  | Real-Time Agent Activity Stream        | `[ ] PENDING` | —         |
+| 6.10 | Interactive HITL Chat Action Blocks    | `[ ] PENDING` | —         |
 
 ## Phase 7 — Jira Integration & Context Binding
 
@@ -159,7 +164,7 @@
 
 ## Summary
 
-- Total Stories: 57
+- Total Stories: 62
 - Done: 6
 - In Progress: 0
-- Pending: 51
+- Pending: 56
