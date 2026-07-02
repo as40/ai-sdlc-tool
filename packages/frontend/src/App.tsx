@@ -14,6 +14,7 @@ import AIConfigPage from './pages/settings/AIConfigPage';
 import SSOSettingsPage from './pages/settings/SSOSettingsPage';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { useAuthStore } from './store/auth.store';
+import { apiFetch } from './utils/api-fetch';
 
 const DevAuthPanel = import.meta.env.DEV
   ? lazy(() => import('./components/dev/DevAuthPanel'))
@@ -39,7 +40,7 @@ function HomePage() {
     if (!user || !token) return;
 
     setChecking(true);
-    fetch('/api/workspaces', { headers: { Authorization: `Bearer ${token}` } })
+    apiFetch('/api/workspaces')
       .then((r) => r.json() as Promise<{ id: string }[]>)
       .then((workspaces) => {
         if (workspaces.length > 0) {

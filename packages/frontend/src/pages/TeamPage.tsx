@@ -5,6 +5,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Select } from '../components/ui/select';
 import { Alert } from '../components/ui/alert';
+import { apiFetch } from '../utils/api-fetch';
 
 interface Member {
   id: string;
@@ -18,7 +19,6 @@ interface Props {
 }
 
 export default function TeamPage({ workspaceId }: Props) {
-  const token = useAuthStore((s) => s.token);
   const user = useAuthStore((s) => s.user);
   const [members, setMembers] = useState<Member[]>([]);
   const [email, setEmail] = useState('');
@@ -32,9 +32,7 @@ export default function TeamPage({ workspaceId }: Props) {
   async function loadMembers() {
     setError(null);
     try {
-      const res = await fetch(`/api/workspaces/${workspaceId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await apiFetch(`/api/workspaces/${workspaceId}`);
       if (!res.ok) throw new Error('Failed to load workspace');
       const data = (await res.json()) as { members?: Member[] };
       setMembers(data.members ?? []);
@@ -49,9 +47,9 @@ export default function TeamPage({ workspaceId }: Props) {
     setInviteSuccess(false);
     setLoading(true);
     try {
-      const res = await fetch(`/api/workspaces/${workspaceId}/invites`, {
+      const res = await apiFetch(`/api/workspaces/${workspaceId}/invites`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, role }),
       });
       if (!res.ok) {
@@ -71,9 +69,8 @@ export default function TeamPage({ workspaceId }: Props) {
   async function handleRemove(userId: string) {
     setError(null);
     try {
-      const res = await fetch(`/api/workspaces/${workspaceId}/members/${userId}`, {
+      const res = await apiFetch(`/api/workspaces/${workspaceId}/members/${userId}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) {
         const body = (await res.json()) as { detail?: string };
