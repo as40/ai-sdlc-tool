@@ -24,14 +24,15 @@
 
 ## Phase 2 — Authentication & Secure Configuration Setup
 
-| ID  | Title                                 | Status     | Completed  |
-| --- | ------------------------------------- | ---------- | ---------- |
-| 2.0 | Local Development Mock Authentication | `[x] DONE` | 2026-06-30 |
-| 2.1 | Enterprise Identity Integration (SSO) | `[x] DONE` | 2026-06-30 |
-| 2.2 | Just-in-Time (JIT) Auto-Provisioning  | `[x] DONE` | 2026-06-30 |
-| 2.3 | Role-Based Access Control (RBAC)      | `[x] DONE` | 2026-07-01 |
-| 2.4 | Workspace Creation & Team Invites     | `[x] DONE` | 2026-07-01 |
-| 2.5 | Universal AI Provider Configuration   | `[x] DONE` | 2026-07-01 |
+| ID  | Title                                      | Status        | Completed  |
+| --- | ------------------------------------------ | ------------- | ---------- |
+| 2.0 | Local Development Mock Authentication      | `[x] DONE`    | 2026-06-30 |
+| 2.1 | Enterprise Identity Integration (SSO)      | `[x] DONE`    | 2026-06-30 |
+| 2.2 | Just-in-Time (JIT) Auto-Provisioning       | `[x] DONE`    | 2026-06-30 |
+| 2.3 | Role-Based Access Control (RBAC)           | `[x] DONE`    | 2026-07-01 |
+| 2.4 | Workspace Creation & Team Invites          | `[x] DONE`    | 2026-07-01 |
+| 2.5 | Universal AI Provider Configuration        | `[x] DONE`    | 2026-07-01 |
+| 2.6 | AI Provider Credentials & Model Assignment | `[ ] PENDING` | —          |
 
 ## Phase 3 — Workspace Onboarding & Multi-Repo Universal Scanner
 
@@ -182,7 +183,7 @@
 
 ## Summary
 
-- Total Stories: 80
+- Total Stories: 81
 - Done: 7
 - In Progress: 0
-- Pending: 73
+- Pending: 74
