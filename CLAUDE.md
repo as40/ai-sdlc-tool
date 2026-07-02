@@ -137,7 +137,8 @@ ai-sdlc-tool/
 8. Commit all changes to the feature branch.
 9. Mark the story `[x] DONE` in `STORY_TRACKER.md` with the completion date.
 10. Update `STORY_TRACKER.md` "Last Updated" field.
-11. Update `README.md` **only** if the story introduced something a developer needs to run the project: a new required env var, a new external service, a new CLI command, or a new dependency that requires manual setup. Do **not** add story titles, changelogs, or feature descriptions to the README.
+11. Update `docs/technical/phase-XX-<slug>.md` with what was built: API endpoints, schema changes, frontend routes/components, new env vars, and any stubs introduced. Create the file if it does not exist for this phase. Also update `docs/technical/index.md`.
+12. Update `README.md` **only** if the story introduced something a developer needs to run the project: a new required env var, a new external service, a new CLI command, or a new dependency that requires manual setup. Do **not** add story titles, changelogs, or feature descriptions to the README.
 
 ## Design References
 
