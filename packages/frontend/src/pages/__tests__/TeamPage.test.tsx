@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import TeamPage from '../TeamPage';
 import * as authStore from '../../store/auth.store';
 
@@ -52,5 +52,100 @@ describe('TeamPage', () => {
     mockAuth('SUPER_ADMIN');
     render(<TeamPage workspaceId="ws-001" />);
     expect(screen.getByText('Invite Member')).toBeInTheDocument();
+  });
+
+  it('shows success alert after successful invite', async () => {
+    mockAuth('WORKSPACE_OWNER');
+    vi.mocked(fetch).mockImplementation(() =>
+      Promise.resolve({ ok: true, json: async () => ({}) } as Response),
+    );
+
+    render(<TeamPage workspaceId="ws-001" />);
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'new@example.com' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Send Invite' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Invitation sent.')).toBeInTheDocument();
+    });
+  });
+
+  it('shows error alert when invite fails', async () => {
+    mockAuth('WORKSPACE_OWNER');
+    vi.mocked(fetch).mockResolvedValue({
+      ok: false,
+      json: async () => ({ detail: 'Email already invited' }),
+    } as Response);
+
+    render(<TeamPage workspaceId="ws-001" />);
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'dup@example.com' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Send Invite' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Email already invited')).toBeInTheDocument();
+    });
+  });
+
+  it('renders member list returned after invite', async () => {
+    mockAuth('WORKSPACE_OWNER');
+    vi.mocked(fetch).mockImplementation((input, init) => {
+      const url = input.toString();
+      if (url.includes('/invites') && init?.method === 'POST') {
+        return Promise.resolve({ ok: true, json: async () => ({}) } as Response);
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          members: [
+            { id: 'm1', userId: 'user-two', accessLevel: 'DEVELOPER', createdAt: '2026-01-01' },
+          ],
+        }),
+      } as Response);
+    });
+
+    render(<TeamPage workspaceId="ws-001" />);
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'dev@example.com' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Send Invite' }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/user-two/)).toBeInTheDocument();
+    });
+  });
+
+  it('shows remove button for manageable members and calls DELETE', async () => {
+    mockAuth('WORKSPACE_OWNER');
+    vi.mocked(fetch).mockImplementation((input, init) => {
+      const url = input.toString();
+      if (init?.method === 'DELETE') {
+        return Promise.resolve({ ok: true, json: async () => ({}) } as Response);
+      }
+      if (url.includes('/invites')) {
+        return Promise.resolve({ ok: true, json: async () => ({}) } as Response);
+      }
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          members: [
+            { id: 'm1', userId: 'other-user', accessLevel: 'DEVELOPER', createdAt: '2026-01-01' },
+          ],
+        }),
+      } as Response);
+    });
+
+    render(<TeamPage workspaceId="ws-001" />);
+    fireEvent.change(screen.getByLabelText('Email'), { target: { value: 'dev@example.com' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Send Invite' }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Remove' }));
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(
+        '/api/workspaces/ws-001/members/other-user',
+        expect.objectContaining({ method: 'DELETE' }),
+      );
+    });
   });
 });

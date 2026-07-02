@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import { useAuthStore } from '../store/auth.store';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Select } from '../components/ui/select';
+import { Alert } from '../components/ui/alert';
 
 interface Member {
   id: string;
@@ -84,8 +89,16 @@ export default function TeamPage({ workspaceId }: Props) {
     <div className="min-h-screen bg-zinc-950 p-8">
       <h1 className="mb-6 text-2xl font-semibold text-zinc-50">Team Members</h1>
 
-      {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
-      {inviteSuccess && <p className="mb-4 text-sm text-green-400">Invitation sent.</p>}
+      {error && (
+        <Alert variant="error" className="mb-4">
+          {error}
+        </Alert>
+      )}
+      {inviteSuccess && (
+        <Alert variant="success" className="mb-4">
+          Invitation sent.
+        </Alert>
+      )}
 
       {members.length > 0 && (
         <ul className="mb-8 space-y-2">
@@ -98,12 +111,9 @@ export default function TeamPage({ workspaceId }: Props) {
                 {m.userId} — <span className="text-zinc-400">{m.accessLevel}</span>
               </span>
               {canManage && m.userId !== user?.sub && (
-                <button
-                  onClick={() => void handleRemove(m.userId)}
-                  className="text-xs text-red-400 hover:text-red-300"
-                >
+                <Button variant="destructive" size="sm" onClick={() => void handleRemove(m.userId)}>
                   Remove
-                </button>
+                </Button>
               )}
             </li>
           ))}
@@ -113,29 +123,31 @@ export default function TeamPage({ workspaceId }: Props) {
       {canManage && (
         <form onSubmit={(e) => void handleInvite(e)} className="max-w-sm space-y-3">
           <h2 className="text-lg font-medium text-zinc-50">Invite Member</h2>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="user@example.com"
-            required
-            className="w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50 outline-none focus:border-zinc-500"
-          />
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value as 'DEVELOPER' | 'VIEWER')}
-            className="w-full rounded border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-50"
-          >
-            <option value="DEVELOPER">Developer</option>
-            <option value="VIEWER">Viewer</option>
-          </select>
-          <button
-            type="submit"
-            disabled={loading}
-            className="rounded bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50"
-          >
+          <div className="space-y-1">
+            <Label htmlFor="invite-email">Email</Label>
+            <Input
+              id="invite-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="user@example.com"
+              required
+            />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="invite-role">Role</Label>
+            <Select
+              id="invite-role"
+              value={role}
+              onChange={(e) => setRole(e.target.value as 'DEVELOPER' | 'VIEWER')}
+            >
+              <option value="DEVELOPER">Developer</option>
+              <option value="VIEWER">Viewer</option>
+            </Select>
+          </div>
+          <Button type="submit" disabled={loading}>
             {loading ? 'Inviting…' : 'Send Invite'}
-          </button>
+          </Button>
         </form>
       )}
     </div>
