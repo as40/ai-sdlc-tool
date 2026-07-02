@@ -3,7 +3,11 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import TeamPage from '../TeamPage';
 import * as authStore from '../../store/auth.store';
 
-vi.mock('../../store/auth.store', () => ({ useAuthStore: vi.fn() }));
+vi.mock('../../store/auth.store', () => ({
+  useAuthStore: Object.assign(vi.fn(), {
+    getState: () => ({ token: 'mock-token', clearToken: vi.fn() }),
+  }),
+}));
 
 const mockUseAuthStore = vi.mocked(authStore.useAuthStore);
 

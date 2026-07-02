@@ -4,6 +4,7 @@ import { useAuthStore } from '../../store/auth.store';
 import AIConfigForm from '../../components/settings/AIConfigForm';
 import { Button } from '../../components/ui/button';
 import { Alert } from '../../components/ui/alert';
+import { apiFetch } from '../../utils/api-fetch';
 
 interface AIConfigRecord {
   id: string;
@@ -32,16 +33,14 @@ export default function AIConfigPage() {
   const loadConfigs = useCallback(async () => {
     setLoadError(null);
     try {
-      const res = await fetch(`/api/workspaces/${workspaceId}/ai-config`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await apiFetch(`/api/workspaces/${workspaceId}/ai-config`);
       if (!res.ok) throw new Error('Failed to load configurations.');
       const data = (await res.json()) as AIConfigRecord[];
       setConfigs(data);
     } catch (err) {
       setLoadError(err instanceof Error ? err.message : 'Unknown error');
     }
-  }, [workspaceId, token]);
+  }, [workspaceId]);
 
   useEffect(() => {
     void loadConfigs();
@@ -50,9 +49,8 @@ export default function AIConfigPage() {
   async function handleDelete(id: string) {
     setDeleting((prev) => ({ ...prev, [id]: true }));
     try {
-      const res = await fetch(`/api/workspaces/${workspaceId}/ai-config/${id}`, {
+      const res = await apiFetch(`/api/workspaces/${workspaceId}/ai-config/${id}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error('Delete failed.');
       setConfigs((prev) => prev.filter((c) => c.id !== id));
@@ -66,9 +64,8 @@ export default function AIConfigPage() {
   async function handleTest(id: string) {
     setTesting((prev) => ({ ...prev, [id]: true }));
     try {
-      const res = await fetch(`/api/workspaces/${workspaceId}/ai-config/${id}/test`, {
+      const res = await apiFetch(`/api/workspaces/${workspaceId}/ai-config/${id}/test`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
       });
       const data = (await res.json()) as TestResult;
       setTestResults((prev) => ({ ...prev, [id]: data }));

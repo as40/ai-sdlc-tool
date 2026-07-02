@@ -1,7 +1,7 @@
 # STORY TRACKER
 
 > **READ THIS FILE FIRST every session before writing any code.**
-> Last Updated: 2026-07-01 (Story 2.5 complete)
+> Last Updated: 2026-07-02 (added boot lifecycle 9.6 + core content libraries 5.13–5.16; earlier: Trusted Output + governance 5.10–5.12, 7.5, 9.5, 10.5–10.6, 13.7–13.8)
 
 ---
 
@@ -49,19 +49,28 @@
 | 4.1 | Database Schema for Vector Memory      | `[ ] PENDING` | —         |
 | 4.2 | AST-Aware Chunking & Embedding Runner  | `[ ] PENDING` | —         |
 | 4.3 | Real-Time Mapping Progress Loader Card | `[ ] PENDING` | —         |
+| 4.4 | Workspace AI Memory Store              | `[ ] PENDING` | —         |
 
 ## Phase 5 — Core AI Orchestration Engine
 
-| ID  | Title                                                | Status        | Completed |
-| --- | ---------------------------------------------------- | ------------- | --------- |
-| 5.1 | Dynamic Registry Loader                              | `[ ] PENDING` | —         |
-| 5.2 | System Prompt & Markdown Standards Compiler          | `[ ] PENDING` | —         |
-| 5.3 | Model Context Protocol (MCP) Skill Router            | `[ ] PENDING` | —         |
-| 5.4 | State-Machine Workflow Orchestrator                  | `[ ] PENDING` | —         |
-| 5.5 | Human-in-the-Loop (HITL) Interceptor & Revisor       | `[ ] PENDING` | —         |
-| 5.7 | HITL Request Tool Registration (request_human_input) | `[ ] PENDING` | —         |
-| 5.8 | Orchestrator Loop Suspension & Activity Stream       | `[ ] PENDING` | —         |
-| 5.9 | Anti-Loop Interception Middleware                    | `[ ] PENDING` | —         |
+| ID   | Title                                                | Status        | Completed |
+| ---- | ---------------------------------------------------- | ------------- | --------- |
+| 5.1  | Dynamic Registry Loader                              | `[ ] PENDING` | —         |
+| 5.2  | System Prompt & Markdown Standards Compiler          | `[ ] PENDING` | —         |
+| 5.3  | Model Context Protocol (MCP) Skill Router            | `[ ] PENDING` | —         |
+| 5.4  | State-Machine Workflow Orchestrator                  | `[ ] PENDING` | —         |
+| 5.5  | Human-in-the-Loop (HITL) Interceptor & Revisor       | `[ ] PENDING` | —         |
+| 5.6  | Pre-Execution Planning Gate                          | `[ ] PENDING` | —         |
+| 5.7  | HITL Request Tool Registration (request_human_input) | `[ ] PENDING` | —         |
+| 5.8  | Orchestrator Loop Suspension & Activity Stream       | `[ ] PENDING` | —         |
+| 5.9  | Anti-Loop Interception Middleware                    | `[ ] PENDING` | —         |
+| 5.10 | Self-Verification Quality Gate                       | `[ ] PENDING` | —         |
+| 5.11 | Sensitive-Data Redaction (DLP) Before LLM Calls      | `[ ] PENDING` | —         |
+| 5.12 | AI Reviewer / Critic Agent                           | `[ ] PENDING` | —         |
+| 5.13 | Core Agent Persona Library                           | `[ ] PENDING` | —         |
+| 5.14 | Core Workflow Definition Library                     | `[ ] PENDING` | —         |
+| 5.15 | Core Skill Library Completion                        | `[ ] PENDING` | —         |
+| 5.16 | Core Tech-Stack Standards (Plugin) Library           | `[ ] PENDING` | —         |
 
 ## Phase 6 — Visual Workspace IDE & Live Code Editor
 
@@ -86,6 +95,7 @@
 | 7.2 | Compact Epic-to-Story Directory         | `[ ] PENDING` | —         |
 | 7.3 | Interactive Context Attachment Pipeline | `[ ] PENDING` | —         |
 | 7.4 | Multimodal Design Ingestion Pipeline    | `[ ] PENDING` | —         |
+| 7.5 | Broader Enterprise Knowledge Ingestion  | `[ ] PENDING` | —         |
 
 ## Phase 8 — Automated Branching & Version Control Operations
 
@@ -98,21 +108,25 @@
 
 ## Phase 9 — Containerized Sandbox Runtime Environment
 
-| ID  | Title                                | Status        | Completed |
-| --- | ------------------------------------ | ------------- | --------- |
-| 9.1 | Multi-Repo Docker Orchestration      | `[ ] PENDING` | —         |
-| 9.2 | Manual Sandbox Trigger & Proxy Setup | `[ ] PENDING` | —         |
-| 9.3 | Live Terminal Logging Window         | `[ ] PENDING` | —         |
-| 9.4 | Automated Resource Hibernation       | `[ ] PENDING` | —         |
+| ID  | Title                                  | Status        | Completed |
+| --- | -------------------------------------- | ------------- | --------- |
+| 9.1 | Multi-Repo Docker Orchestration        | `[ ] PENDING` | —         |
+| 9.2 | Manual Sandbox Trigger & Proxy Setup   | `[ ] PENDING` | —         |
+| 9.3 | Live Terminal Logging Window           | `[ ] PENDING` | —         |
+| 9.4 | Automated Resource Hibernation         | `[ ] PENDING` | —         |
+| 9.5 | Security Scanning of AI-Generated Code | `[ ] PENDING` | —         |
+| 9.6 | Boot Recipe & Sandbox Lifecycle        | `[ ] PENDING` | —         |
 
 ## Phase 10 — Usage Audit & Analytics
 
-| ID   | Title                               | Status        | Completed |
-| ---- | ----------------------------------- | ------------- | --------- |
-| 10.1 | Execution Audit Database Schema     | `[ ] PENDING` | —         |
-| 10.2 | Backend AI Execution Interceptor    | `[ ] PENDING` | —         |
-| 10.3 | Workspace Admin Analytics Dashboard | `[ ] PENDING` | —         |
-| 10.4 | Configurable Local Rate Limits      | `[ ] PENDING` | —         |
+| ID   | Title                                   | Status        | Completed |
+| ---- | --------------------------------------- | ------------- | --------- |
+| 10.1 | Execution Audit Database Schema         | `[ ] PENDING` | —         |
+| 10.2 | Backend AI Execution Interceptor        | `[ ] PENDING` | —         |
+| 10.3 | Workspace Admin Analytics Dashboard     | `[ ] PENDING` | —         |
+| 10.4 | Configurable Local Rate Limits          | `[ ] PENDING` | —         |
+| 10.5 | Org-Level Cost Governance & Budgets     | `[ ] PENDING` | —         |
+| 10.6 | Compliance Audit & AI Change Provenance | `[ ] PENDING` | —         |
 
 ## Phase 11 — IP Protection & Enterprise Distribution
 
@@ -126,17 +140,19 @@
 
 ## Phase 12 — Session Isolation & Memory Lifecycle
 
-| ID   | Title                              | Status        | Completed |
-| ---- | ---------------------------------- | ------------- | --------- |
-| 12.1 | Session Management Database Schema | `[ ] PENDING` | —         |
-| 12.2 | The Hard Purge UI Hook             | `[ ] PENDING` | —         |
-| 12.3 | Automated State-Tracking Skill     | `[ ] PENDING` | —         |
-| 12.4 | Context Bootstrapper Middleware    | `[ ] PENDING` | —         |
-| 12.5 | Background Summarization Pipeline  | `[ ] PENDING` | —         |
-| 12.6 | Auto-Compaction Middleware         | `[ ] PENDING` | —         |
-| 12.7 | AST Snippet Isolation Middleware   | `[ ] PENDING` | —         |
-| 12.8 | Unified Diff Return Parser         | `[ ] PENDING` | —         |
-| 12.9 | Context Stack Trace Condenser      | `[ ] PENDING` | —         |
+| ID    | Title                                      | Status        | Completed |
+| ----- | ------------------------------------------ | ------------- | --------- |
+| 12.1  | Session Management Database Schema         | `[ ] PENDING` | —         |
+| 12.2  | The Hard Purge UI Hook                     | `[ ] PENDING` | —         |
+| 12.3  | Automated State-Tracking Skill             | `[ ] PENDING` | —         |
+| 12.4  | Context Bootstrapper Middleware            | `[ ] PENDING` | —         |
+| 12.5  | Background Summarization Pipeline          | `[ ] PENDING` | —         |
+| 12.6  | Auto-Compaction Middleware                 | `[ ] PENDING` | —         |
+| 12.7  | AST Snippet Isolation Middleware           | `[ ] PENDING` | —         |
+| 12.8  | Unified Diff Return Parser                 | `[ ] PENDING` | —         |
+| 12.9  | Context Stack Trace Condenser              | `[ ] PENDING` | —         |
+| 12.10 | Workflow Checkpoint & Resume               | `[ ] PENDING` | —         |
+| 12.11 | Preference Learning from Revision Feedback | `[ ] PENDING` | —         |
 
 ## Phase 13 — Advanced Workspace Customization & Validation Guardrails
 
@@ -148,6 +164,8 @@
 | 13.4 | Backend AI "Prompt Auditor" Middleware                | `[ ] PENDING` | —         |
 | 13.5 | Config Inheritance & Merging Engine                   | `[ ] PENDING` | —         |
 | 13.6 | Unbreakable Base System Prompt Compiler               | `[ ] PENDING` | —         |
+| 13.7 | Policy-Based Approval Routing                         | `[ ] PENDING` | —         |
+| 13.8 | Agent Evaluation Harness & Regression Detection       | `[ ] PENDING` | —         |
 
 ## Phase 14 — Visual Compilation Engine
 
@@ -164,7 +182,7 @@
 
 ## Summary
 
-- Total Stories: 62
+- Total Stories: 80
 - Done: 7
 - In Progress: 0
-- Pending: 55
+- Pending: 73

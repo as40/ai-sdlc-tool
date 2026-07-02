@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/auth.store';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { FormMessage } from '../components/ui/form-message';
+import { apiFetch } from '../utils/api-fetch';
 
 export default function WorkspacePage() {
   const navigate = useNavigate();
-  const token = useAuthStore((s) => s.token);
   const [name, setName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -18,9 +17,9 @@ export default function WorkspacePage() {
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch('/api/workspaces', {
+      const res = await apiFetch('/api/workspaces', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name }),
       });
       if (!res.ok) {
